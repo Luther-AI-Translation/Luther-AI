@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Luther AI - Unlock Pro</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: none;
+    }
+    button {
+      background-color: #00cc66;
+      color: white;
+      cursor: pointer;
+    }
+    #status {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎙️ Unlock Luther AI Pro</h1>
+  <p>Enter your email to unlock unlimited translations.</p>
+  <form id="unlock-form">
+    <input type="email" id="email" placeholder="you@example.com" required />
+    <button type="submit">Unlock Now</button>
+  </form>
+  <p id="status"></p>
+
+  <script>
+    const form = document.getElementById(\"unlock-form\");
+    const status = document.getElementById(\"status\");
+
+    form.addEventListener(\"submit\", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById(\"email\").value.trim();
+      status.textContent = \"Checking...\";
+
+      try {
+        const res = await fetch(\"https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec?email=\" + encodeURIComponent(email));
+        const data = await res.json();
+
+        if (data.isPro) {
+          window.postMessage({ type: 'UNLOCK_PRO', email }, '*');
+          status.textContent = \"✅ Success! You can now return to the ChitChat extension.\";
+        } else {
+          status.textContent = \"❌ Email not found. Please try another or contact support.\";
+        }
+      } catch (err) {
+        status.textContent = \"Error checking email. Please try again later.\";
+      }
+    });
+  </script>
+</body>
+</html>
