@@ -1,0 +1,38 @@
+<!-- create a success page on luther-ai.com/success.html -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('email');
+    const proKey = urlParams.get('key');
+    
+    if (email && proKey) {
+      // Create a button that opens the extension with verification data
+      const button = document.createElement('button');
+      button.textContent = 'Activate Luther AI Pro';
+      button.style.padding = '12px 24px';
+      button.style.background = '#00cc66';
+      button.style.color = 'white';
+      button.style.border = 'none';
+      button.style.borderRadius = '4px';
+      button.style.fontSize = '16px';
+      button.style.cursor = 'pointer';
+      button.style.margin = '20px 0';
+      
+      button.addEventListener('click', () => {
+        // This will be caught by our content script on luther-ai.com
+        localStorage.setItem('lutherProActivation', JSON.stringify({
+          email: email,
+          key: proKey,
+          timestamp: Date.now()
+        }));
+        
+        // Display activation instructions
+        document.getElementById('activation-status').innerHTML = `
+          <p>✅ Pro activation data saved! Click the Luther AI extension icon in your browser to complete activation.</p>
+        `;
+      });
+      
+      document.getElementById('activation-container').appendChild(button);
+    }
+  });
+</script>
