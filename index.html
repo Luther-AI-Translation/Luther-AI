@@ -77,33 +77,47 @@
   </script>
   ---
 <form id="verify-form">
-  <h2>Verify Your Luther AI Pro Subscription</h2>
-  <input type="email" id="email" placeholder="Enter your email" required>
-  <button type="submit">Verify Pro Status</button>
-</form>
-
-<script>
-  document.getElementById('verify-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value.trim();
-    
-    try {
-      const res = await fetch(`https://script.google.com/macros/s/AKfycbzRrW3pqY2o6xm9hLftjAx2KJS2in_9A_RSaignpnBbPXKfjU2ShavmISfnM39jLR_E/exec?email=${encodeURIComponent(email)}`);
-      const data = await res.json();
+    <h2>Verify Your Luther AI Pro Subscription</h2>
+    <input type="email" id="email" placeholder="Enter your email" required>
+    <button type="submit">Verify Pro Status</button>
+  </form>
+  
+  <script>
+    document.getElementById('verify-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const button = e.target.querySelector('button');
+      button.disabled = true;
+      button.textContent = 'Verifying...';
       
-      if (data.isPro) {
-        // Generate a one-time verification key
-        const verificationKey = Math.random().toString(36).substring(2, 15);
+      try {
+        const url = `https://script.google.com/macros/s/AKfycbzRrW3pqY2o6xm9hLftjAx2KJS2in_9A_RSaignpnBbPXKfjU2ShavmISfnM39jLR_E/exec?email=${encodeURIComponent(email)}`;
+        const res = await fetch(url);
         
-        // Redirect to success page with params
-        window.location.href = `success.html?email=${encodeURIComponent(email)}&key=${verificationKey}`;
-      } else {
-        alert("This email is not registered for Pro access. Please purchase a subscription first.");
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        
+        const data = await res.json();
+        console.log('Response data:', data);
+        
+        if (data.isPro === true) {
+          // Generate a one-time verification key
+          const verificationKey = Math.random().toString(36).substring(2, 15);
+          
+          // Redirect to success page with params
+          window.location.href = `success.html?email=${encodeURIComponent(email)}&key=${verificationKey}`;
+        } else {
+          alert("This email is not registered for Pro access. Please purchase a subscription first.");
+        }
+      } catch (err) {
+        console.error('Error during verification:', err);
+        alert(`Error verifying your subscription: ${err.message}. Please try again later.`);
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Verify Pro Status';
       }
-    } catch (err) {
-      alert("Error verifying your subscription. Please try again later.");
-    }
-  });
-</script>
+    });
+  </script>
 </body>
 </html>
