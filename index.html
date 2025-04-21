@@ -1,35 +1,43 @@
 <script>
-  const form = document.getElementById("unlock-form");
-  const status = document.getElementById("status");
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("unlock-form");
+    const status = document.getElementById("status");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById("email").value.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(email)) {
-      status.textContent = "Please enter a valid email address.";
+    if (!form || !status) {
+      console.error("Form or status element not found in the DOM.");
       return;
     }
 
-    status.textContent = "🔄 Checking...";
-    form.querySelector("button").disabled = true;
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    try {
-      const res = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec?email=" + encodeURIComponent(email));
-      const data = await res.json();
+      const email = document.getElementById("email").value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if (data.isPro) {
-        status.textContent = "✅ Success! If you have the Luther AI extension installed, it will unlock shortly.";
-        window.dispatchEvent(new CustomEvent("luther-ai-unlock", { detail: { email } }));
-      } else {
-        status.textContent = "❌ Email not found. Please try another or contact support.";
+      if (!emailRegex.test(email)) {
+        status.textContent = "Please enter a valid email address.";
+        return;
       }
-    } catch (err) {
-      status.textContent = "⚠️ Error checking email. Please try again later.";
-    } finally {
-      form.querySelector("button").disabled = false;
-    }
+
+      status.textContent = "🔄 Checking...";
+      form.querySelector("button").disabled = true;
+
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbzRrW3pqY2o6xm9hLftjAx2KJS2in_9A_RSaignpnBbPXKfjU2ShavmISfnM39jLR_E/exec?email=" + encodeURIComponent(email));
+        const data = await res.json();
+
+        if (data.isPro) {
+          status.textContent = "✅ Success! If you have the Luther AI extension installed, it will unlock shortly.";
+          window.dispatchEvent(new CustomEvent("luther-ai-unlock", { detail: { email } }));
+        } else {
+          status.textContent = "❌ Email not found. Please try another or contact support.";
+        }
+      } catch (err) {
+        console.error(err);
+        status.textContent = "⚠️ Error checking email. Please try again later.";
+      } finally {
+        form.querySelector("button").disabled = false;
+      }
+    });
   });
 </script>
