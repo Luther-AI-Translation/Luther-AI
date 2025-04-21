@@ -76,7 +76,7 @@
     });
   </script>
   ---
-  <form id="verify-form">
+<form id="verify-form">
   <h2>Verify Your Luther AI Pro Subscription</h2>
   <input type="email" id="email" placeholder="Enter your email" required>
   <button type="submit">Verify Pro Status</button>
@@ -88,10 +88,10 @@
     const email = document.getElementById('email').value.trim();
     
     try {
-      const res = await fetch(`https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec?email=${encodeURIComponent(email)}`);
+      const res = await fetch(`https://script.google.com/macros/s/AKfycbzRrW3pqY2o6xm9hLftjAx2KJS2in_9A_RSaignpnBbPXKfjU2ShavmISfnM39jLR_E/exec?email=${encodeURIComponent(email)}`);
       const data = await res.json();
       
-      if (data.success && data.isPro) {
+      if (data.isPro) {
         // Generate a one-time verification key
         const verificationKey = Math.random().toString(36).substring(2, 15);
         
