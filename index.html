@@ -1,43 +1,79 @@
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("unlock-form");
-    const status = document.getElementById("status");
-
-    if (!form || !status) {
-      console.error("Form or status element not found in the DOM.");
-      return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Luther AI Unlock</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      max-width: 500px;
+      margin: auto;
     }
+    input, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      width: 100%;
+    }
+    #status {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Unlock Luther AI Pro</h1>
+  <form id="unlock-form">
+    <label for="email">Enter your email:</label>
+    <input type="email" id="email" placeholder="you@example.com" required />
+    <button type="submit">Unlock</button>
+  </form>
+  <p id="status"></p>
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("unlock-form");
+      const status = document.getElementById("status");
 
-      const email = document.getElementById("email").value.trim();
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!emailRegex.test(email)) {
-        status.textContent = "Please enter a valid email address.";
+      if (!form || !status) {
+        console.error("Form or status element not found in the DOM.");
         return;
       }
 
-      status.textContent = "🔄 Checking...";
-      form.querySelector("button").disabled = true;
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-      try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbzRrW3pqY2o6xm9hLftjAx2KJS2in_9A_RSaignpnBbPXKfjU2ShavmISfnM39jLR_E/exec?email=" + encodeURIComponent(email));
-        const data = await res.json();
+        const email = document.getElementById("email").value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (data.isPro) {
-          status.textContent = "✅ Success! If you have the Luther AI extension installed, it will unlock shortly.";
-          window.dispatchEvent(new CustomEvent("luther-ai-unlock", { detail: { email } }));
-        } else {
-          status.textContent = "❌ Email not found. Please try another or contact support.";
+        if (!emailRegex.test(email)) {
+          status.textContent = "Please enter a valid email address.";
+          return;
         }
-      } catch (err) {
-        console.error(err);
-        status.textContent = "⚠️ Error checking email. Please try again later.";
-      } finally {
-        form.querySelector("button").disabled = false;
-      }
+
+        status.textContent = "🔄 Checking...";
+        form.querySelector("button").disabled = true;
+
+        try {
+          const res = await fetch("https://script.google.com/macros/s/AKfycbzRrW3pqY2o6xm9hLftjAx2KJS2in_9A_RSaignpnBbPXKfjU2ShavmISfnM39jLR_E/exec?email=" + encodeURIComponent(email));
+          const data = await res.json();
+
+          if (data.isPro) {
+            status.textContent = "✅ Success! If you have the Luther AI extension installed, it will unlock shortly.";
+            window.dispatchEvent(new CustomEvent("luther-ai-unlock", { detail: { email } }));
+          } else {
+            status.textContent = "❌ Email not found. Please try another or contact support.";
+          }
+        } catch (err) {
+          console.error(err);
+          status.textContent = "⚠️ Error checking email. Please try again later.";
+        } finally {
+          form.querySelector("button").disabled = false;
+        }
+      });
     });
-  });
-</script>
+  </script>
+</body>
+</html>
