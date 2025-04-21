@@ -1,38 +1,48 @@
-<!-- create a success page on luther-ai.com/success.html -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const email = urlParams.get('email');
-    const proKey = urlParams.get('key');
-    
-    if (email && proKey) {
-      // Create a button that opens the extension with verification data
-      const button = document.createElement('button');
-      button.textContent = 'Activate Luther AI Pro';
-      button.style.padding = '12px 24px';
-      button.style.background = '#00cc66';
-      button.style.color = 'white';
-      button.style.border = 'none';
-      button.style.borderRadius = '4px';
-      button.style.fontSize = '16px';
-      button.style.cursor = 'pointer';
-      button.style.margin = '20px 0';
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Luther AI Pro Activation</title>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: 50px auto; text-align: center; }
+    button { padding: 12px 24px; background: #00cc66; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin: 20px 0; }
+  </style>
+</head>
+<body>
+  <h1>Luther AI Pro Activation</h1>
+  <div id="activation-container">
+    <div id="activation-status">Validating your subscription...</div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const email = urlParams.get('email');
+      const proKey = urlParams.get('key');
       
-      button.addEventListener('click', () => {
-        // This will be caught by our content script on luther-ai.com
-        localStorage.setItem('lutherProActivation', JSON.stringify({
-          email: email,
-          key: proKey,
-          timestamp: Date.now()
-        }));
+      if (email && proKey) {
+        // Create a button that activates the extension
+        const button = document.createElement('button');
+        button.textContent = 'Activate Luther AI Pro';
         
-        // Display activation instructions
-        document.getElementById('activation-status').innerHTML = `
-          <p>✅ Pro activation data saved! Click the Luther AI extension icon in your browser to complete activation.</p>
-        `;
-      });
-      
-      document.getElementById('activation-container').appendChild(button);
-    }
-  });
-</script>
+        button.addEventListener('click', () => {
+          // This will be caught by our content script on luther-ai.com
+          localStorage.setItem('lutherProActivation', JSON.stringify({
+            email: email,
+            key: proKey,
+            timestamp: Date.now()
+          }));
+          
+          // Display activation instructions
+          document.getElementById('activation-status').innerHTML = `
+            <p>✅ Pro activation data saved! Click the Luther AI extension icon in your browser to complete activation.</p>
+          `;
+        });
+        
+        document.getElementById('activation-container').appendChild(button);
+      } else {
+        document.getElementById('activation-status').textContent = "Error: Missing activation information.";
+      }
+    });
+  </script>
+</body>
+</html>
