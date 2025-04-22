@@ -2,110 +2,135 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Luther AI Pro Activation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      line-height: 1.6;
-      text-align: center;
+      background: #111;
+      color: #fff;
+      overflow: hidden;
     }
-    
-    h1 {
-      color: #333;
-      margin-bottom: 20px;
-    }
-    
-    .success-message {
+
+    body {
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      background: #f9f9f9;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
+      position: relative;
     }
-    
-    .checkmark {
-      color: #4CAF50;
-      font-size: 48px;
-      margin-bottom: 20px;
+
+    .confetti {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 0;
+      background: url("confetti gif.gif") center center / cover no-repeat;
+      opacity: 0.6;
+      pointer-events: none;
     }
-    
+
+    .container {
+      background: rgba(26, 26, 26, 0.95);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(5px);
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      color: #ccc;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 12px;
+      margin: 1rem 0;
+    }
+
     .button {
-      background: #4285f4;
+      background: #6366f1;
       color: white;
       border: none;
-      padding: 12px 24px;
-      border-radius: 4px;
-      font-size: 16px;
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      font-size: 1rem;
       cursor: pointer;
       transition: background 0.3s;
       text-decoration: none;
-      display: inline-block;
-      margin-top: 20px;
+      margin-top: 1rem;
     }
-    
+
     .button:hover {
-      background: #3367d6;
+      background: #4f46e5;
     }
   </style>
 </head>
 <body>
-  <h1>Luther AI Pro Activation</h1>
-  
-  <div class="success-message">
-    <div class="checkmark">✓</div>
-    <p>Pro activation data saved! Click the Luther AI extension icon in your browser to complete activation.</p>
+  <div class="confetti"></div>
+
+  <div class="container">
+    <h1>Luther AI Pro Activated!</h1>
+    
+    <!-- Embedded MP4 -->
+    <video src="cant touch this.mp4" autoplay muted playsinline loop></video>
+    
+    <p>You're all set. Click the Luther AI extension icon in your browser to complete activation.</p>
+    
+    <button class="button" id="activate-button">Activate Luther AI Pro</button>
   </div>
-  
-  <button class="button" id="activate-button">Activate Luther AI Pro</button>
-  
+
   <script>
-    // Parse URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const email = urlParams.get('email');
     const key = urlParams.get('key');
-    
-    // Store activation data in localStorage exactly as expected by activation.js
+
     if (email && key) {
       const activationData = {
         email: email,
         key: key,
         timestamp: Date.now()
       };
-      
-      // Save to localStorage with the exact key the extension looks for
+
       localStorage.setItem('lutherProActivation', JSON.stringify(activationData));
       console.log('Activation data saved:', activationData);
     }
-    
-    // Handle activation button click - sends message directly to extension
-    document.getElementById('activate-button').addEventListener('click', function() {
+
+    document.getElementById('activate-button').addEventListener('click', function () {
       try {
-        // Try to send message directly to the extension
         chrome.runtime.sendMessage({
           action: "activatePro",
           email: email,
           key: key
-        }, function(response) {
+        }, function (response) {
           console.log('Message sent to extension:', response);
         });
       } catch (e) {
         console.log('Direct message failed. This is normal if accessing from website.', e);
       }
-      
+
       alert('Activation data has been saved. Please click on the Luther AI extension icon in your browser to complete activation.');
     });
-    
-    // Set document.domain to match what the extension expects
+
     try {
       document.domain = "luther-ai.com";
-    } catch(e) {
+    } catch (e) {
       console.log('Cannot set document.domain, this is expected on GitHub Pages');
     }
   </script>
