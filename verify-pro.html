@@ -2,170 +2,171 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>Upgrade to Luther Pro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verify Luther AI Pro Subscription</title>
   <style>
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      line-height: 1.6;
+      background: #111;
+      color: #fff;
     }
-    
-    h2 {
-      color: #333;
-      margin-bottom: 20px;
+
+    body {
+      background: url('luther body.png') no-repeat center center;
+      background-size: contain;
+      background-position: center bottom;
+      background-repeat: no-repeat;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    
+
+    .container {
+      background: rgba(26, 26, 26, 0.95);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      width: 100%;
+      max-width: 420px;
+      backdrop-filter: blur(5px);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.6rem;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      color: #ccc;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.2rem;
+      margin: 1rem 0;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      color: white;
+      background-color: #6366f1;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #4f46e5;
+    }
+
+    .divider {
+      margin: 1rem 0 0.75rem;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
     form {
       display: flex;
       flex-direction: column;
-      background: #f9f9f9;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      gap: 0.75rem;
     }
-    
+
     input {
-      padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 16px;
+      padding: 0.8rem;
+      border-radius: 6px;
+      border: 1px solid #333;
+      background-color: #2a2a2a;
+      color: #fff;
+      font-size: 1rem;
     }
-    
+
+    input::placeholder {
+      color: #888;
+    }
+
     button {
-      background: #4285f4;
+      background: #10b981;
       color: white;
       border: none;
-      padding: 12px;
-      border-radius: 4px;
-      font-size: 16px;
+      padding: 0.8rem;
+      border-radius: 6px;
+      font-size: 1rem;
       cursor: pointer;
       transition: background 0.3s;
     }
-    
+
     button:hover {
-      background: #3367d6;
+      background: #059669;
     }
-    
+
     button:disabled {
-      background: #cccccc;
+      background: #444;
       cursor: not-allowed;
-    }
-    
-    #debug-info {
-      margin-top: 20px;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 12px;
-      color: #666;
-      background: #f5f5f5;
-      max-height: 200px;
-      overflow-y: auto;
     }
   </style>
 </head>
 <body>
-  <h2>Verify Your Luther AI Pro Subscription</h2>
-  
-  <form id="verify-form">
-    <input type="email" id="email" placeholder="Enter your email" required>
-    <button type="submit">Verify Pro Status</button>
-    <div id="debug-info"></div>
-  </form>
-  
-  <script>
-    // Debug function to display information
-    function showDebug(message) {
-      const debugInfo = document.getElementById('debug-info');
-      const timestamp = new Date().toLocaleTimeString();
-      debugInfo.innerHTML += `<div>[${timestamp}] ${message}</div>`;
-      console.log(`[${timestamp}] ${message}`);
-      debugInfo.scrollTop = debugInfo.scrollHeight;
-    }
+  <div class="container">
+    <h1>Oh no! You're out of free translations.</h1>
+    <p>Unlock unlimited AI rants below 👇</p>
 
+    <a href="https://buy.stripe.com/9AQ7tIe7hfCr7ss288" class="btn">Unlock Unlimited Access</a>
+
+    <div class="divider">Already upgraded? Verify your account</div>
+
+    <form id="verify-form">
+      <input type="email" id="email" placeholder="Enter your email" required>
+      <button type="submit">Verify Pro Status</button>
+    </form>
+  </div>
+
+  <script>
     document.getElementById('verify-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
       const button = e.target.querySelector('button');
       button.disabled = true;
       button.textContent = 'Verifying...';
-      
-      // Clear previous debug info
-      document.getElementById('debug-info').innerHTML = '';
-      showDebug(`Verifying email: ${email}`);
-      
+
       try {
         const url = `https://script.google.com/macros/s/AKfycbzRrW3pqY2o6xm9hLftjAx2KJS2in_9A_RSaignpnBbPXKfjU2ShavmISfnM39jLR_E/exec?email=${encodeURIComponent(email)}`;
-        showDebug(`Fetching from URL: ${url}`);
-        
         const res = await fetch(url, {
           method: 'GET',
           mode: 'cors',
           cache: 'no-cache',
-          headers: {
-            'Accept': 'application/json'
-          }
+          headers: { 'Accept': 'application/json' }
         });
-        
-        showDebug(`Response status: ${res.status}`);
-        
-        if (!res.ok) {
-          showDebug(`HTTP error! Status: ${res.status}`);
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        
-        try {
-          const contentType = res.headers.get('content-type');
-          showDebug(`Content-Type: ${contentType}`);
-          
-          const text = await res.text();
-          showDebug(`Raw response: ${text.substring(0, 100)}${text.length > 100 ? '...' : ''}`);
-          
-          // Try to parse JSON
-          const data = JSON.parse(text);
-          showDebug(`Parsed data: ${JSON.stringify(data)}`);
-          
-          // Check explicitly for isPro property
-          if (data && typeof data.isPro !== 'undefined') {
-            showDebug(`isPro value: ${data.isPro}`);
-            
-            if (data.isPro === true) {
-              // Generate a one-time verification key
-              const verificationKey = Math.random().toString(36).substring(2, 15);
-              showDebug(`Verification successful! Redirecting to success page...`);
-              
-              // Redirect to success page with params
-              window.location.href = `success.html?email=${encodeURIComponent(email)}&key=${verificationKey}`;
-            } else {
-              showDebug(`Not a Pro user according to the API.`);
-              alert("This email is not registered for Pro access. Please purchase a subscription first.");
-            }
+
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+        const text = await res.text();
+        const data = JSON.parse(text);
+
+        if (data && typeof data.isPro !== 'undefined') {
+          if (data.isPro === true) {
+            const verificationKey = Math.random().toString(36).substring(2, 15);
+            window.location.href = `success.html?email=${encodeURIComponent(email)}&key=${verificationKey}`;
           } else {
-            showDebug(`Response missing isPro property: ${JSON.stringify(data)}`);
-            throw new Error("Invalid response format from server");
+            alert("This email is not registered for Pro access. Please purchase a subscription first.");
           }
-        } catch (parseError) {
-          showDebug(`JSON parse error: ${parseError.message}`);
-          throw new Error(`Error parsing response: ${parseError.message}`);
+        } else {
+          throw new Error("Invalid response format from server");
         }
       } catch (err) {
-        showDebug(`Error: ${err.message}`);
-        console.error('Error during verification:', err);
-        
-        // Handle specific known emails as a fallback
         if (email.toLowerCase() === "spenc.scott@gmail.com") {
-          showDebug(`Known Pro email detected. Offering override option.`);
           if (confirm("Direct API check failed, but we recognize this as a Pro email. Continue as Pro?")) {
             const verificationKey = Math.random().toString(36).substring(2, 15);
             window.location.href = `success.html?email=${encodeURIComponent(email)}&key=${verificationKey}`;
             return;
           }
         }
-        
+
         alert(`Error verifying your subscription: ${err.message}. Please try again later.`);
       } finally {
         button.disabled = false;
