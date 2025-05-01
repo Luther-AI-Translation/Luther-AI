@@ -10,7 +10,7 @@
 
   gtag('config', 'AW-878061904');
 </script>
-  <meta charset="UTF-8" />
+ <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Luther AI – Translate With Attitude</title>
   <style>
@@ -70,10 +70,40 @@
       border-radius: 6px;
       cursor: pointer;
       transition: background 0.3s ease;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
-    button:hover {
+    button:disabled {
       background: #059669;
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid #ffffff;
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    button.loading .spinner {
+      display: block;
+    }
+
+    button.loading span {
+      display: none;
     }
 
     footer {
@@ -120,7 +150,10 @@
 
   <form id="signup-form">
     <input type="email" placeholder="Enter your email" id="email" required />
-    <button type="submit">Add FREE Extension to Chrome</button>
+    <button type="submit">
+      <div class="spinner"></div>
+      <span>Add FREE Extension to Chrome</span>
+    </button>
   </form>
 
   <ul class="benefits">
@@ -173,12 +206,17 @@
       e.preventDefault();
 
       const email = emailInput.value.trim();
+      const submitButton = form.querySelector('button');
       
       if (!isValidEmail(email)) {
         alert("Please enter a valid email address. Temporary or disposable email addresses are not allowed.");
         emailInput.focus();
         return;
       }
+
+      // Show loading state
+      submitButton.classList.add('loading');
+      submitButton.disabled = true;
 
       console.log("Attempting to submit email:", email);
       
